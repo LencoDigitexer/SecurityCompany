@@ -1,0 +1,70 @@
+﻿<Window x:Class="SecurityCompany.OrganizerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SecurityCompany"
+        mc:Ignorable="d"
+        Title="OrganizerWindow" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Заголовок окна -->
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
+            <TextBlock FontSize="22" Text="Окно организатора" VerticalAlignment="Center"/>
+            
+        </StackPanel>
+
+        <Grid Grid.Row="1" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="3*"/>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0" >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="2*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <!-- Фото пользователя -->
+                <StackPanel Grid.Row="0" HorizontalAlignment="Center" Margin="10">
+                    <Image x:Name="userPhotoImage" Width="200" Height="200" Stretch="UniformToFill"/>
+                </StackPanel>
+
+                <!-- Блок "Мой профиль" -->
+                <Button Grid.Row="1" Content="Мой профиль" Width="120" Margin="10"/>
+            </Grid>
+            <Grid  Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <!-- Время работы -->
+                <StackPanel Grid.Row="0" Margin="10" HorizontalAlignment="Center">
+                    <TextBlock x:Name="workTimeTextBlock" FontSize="14"/>
+                    <TextBlock x:Name="userNameTextBlock" VerticalAlignment="Center"/>
+                </StackPanel>
+                <!-- Кнопка "Мероприятия" -->
+                <Button Grid.Row="1" Content="Мероприятия" Width="120" Margin="10"/>
+
+                <!-- Кнопка "Участники" -->
+                <Button Grid.Row="2" Content="Участники" Width="120" Margin="10"/>
+
+                <!-- Кнопка "Добавить жюри" -->
+                <Button Grid.Row="3" Content="Добавить жюри" Width="120" Margin="10" Click="Button_Click"/>
+            </Grid>
+        </Grid>
+
+        
+        
+        
+
+        
+
+        
+    </Grid>
+</Window>
