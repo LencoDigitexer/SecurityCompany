@@ -18,7 +18,7 @@
                 <PasswordBox x:Name="passwordBox" Width="200"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                <TextBlock Text="CAPTCHA: " VerticalAlignment="Center" Width="100"/>
+                <Label Content="CAPTCHA: " VerticalAlignment="Center" Width="100" MouseDoubleClick="GenerateValid"/>
                 <TextBox x:Name="captchaTextBox" Width="100"/>
                 <Button Content="Refresh" Width="80" Margin="10,0,0,0" Click="RefreshCaptchaButton_Click"/>
             </StackPanel>

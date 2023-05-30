@@ -12,23 +12,31 @@
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20">
                 <TextBlock Text="Filter by Direction: "/>
                 <ComboBox x:Name="directionComboBox" Width="150" SelectedIndex="0">
-                    <ComboBoxItem Content="All"/>
-                    <ComboBoxItem Content="Direction 1"/>
-                    <ComboBoxItem Content="Direction 2"/>
-                    <ComboBoxItem Content="Direction 3"/>
+                    <ComboBoxItem Content="Все"/>
+                    <ComboBoxItem Content="1"/>
+                    <ComboBoxItem Content="2"/>
+                    <ComboBoxItem Content="3"/>
                 </ComboBox>
             </StackPanel>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10">
-                <TextBlock Text="Filter by Date: "/>
+                <Label Content="Filter by Date: "/>
                 <DatePicker x:Name="datePicker" Width="150"/>
             </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10">
+                <TextBlock Text="Search: "/>
+                <TextBox x:Name="searchTextBox" Width="150" TextChanged="FilterEvents"/>
+            </StackPanel>
+            <Button Content="Reset" Width="100" HorizontalAlignment="Center" Margin="0,10" Click="ResetButton_Click"/>
+
             <Button Content="Login" Width="100" HorizontalAlignment="Center" Margin="0,20" Click="LoginButton_Click"/>
             <ListView x:Name="eventsListView" Margin="20" ItemsSource="{Binding}">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="Event Name" Width="200" DisplayMemberBinding="{Binding eventName}"/>
-                        <GridViewColumn Header="Event Type" Width="150" DisplayMemberBinding="{Binding EventType.name}" />
+                        
                         <GridViewColumn Header="Date" Width="150" DisplayMemberBinding="{Binding date}"/>
+                        <GridViewColumn Header="Days" Width="150" DisplayMemberBinding="{Binding days}"/>
+                        <GridViewColumn Header="City" Width="150" DisplayMemberBinding="{Binding city_id}"/>
                     </GridView>
                 </ListView.View>
             </ListView>

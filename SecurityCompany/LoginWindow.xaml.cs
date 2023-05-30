@@ -27,7 +27,7 @@ namespace SecurityCompany
         {
             InitializeComponent();
             loginAttempts = 0;
-            GenerateCaptcha();
+            //GenerateCaptcha();
         }
 
         private void GenerateCaptcha()
@@ -53,15 +53,39 @@ namespace SecurityCompany
             const int captchaWidth = 150;
             const int captchaHeight = 50;
             const double fontSize = 24;
+            const int noisePointCount = 100;
+            const int noiseLineCount = 10;
 
             DrawingVisual drawingVisual = new DrawingVisual();
             using (DrawingContext drawingContext = drawingVisual.RenderOpen())
             {
+                // Заполняем фон белым цветом
                 drawingContext.DrawRectangle(Brushes.White, null, new Rect(0, 0, captchaWidth, captchaHeight));
+
+                // Рисуем текст CAPTCHA
                 drawingContext.DrawText(
                     new FormattedText(captchaText, CultureInfo.InvariantCulture, FlowDirection.LeftToRight,
                         new Typeface("Arial"), fontSize, Brushes.Black),
                     new Point(0, 0));
+
+                // Добавляем случайные точки как графический шум
+                Random random = new Random();
+                for (int i = 0; i < noisePointCount; i++)
+                {
+                    double x = random.NextDouble() * captchaWidth;
+                    double y = random.NextDouble() * captchaHeight;
+                    drawingContext.DrawEllipse(Brushes.Black, null, new Point(x, y), 1, 1);
+                }
+
+                // Добавляем случайные линии как графический шум
+                for (int i = 0; i < noiseLineCount; i++)
+                {
+                    double x1 = random.NextDouble() * captchaWidth;
+                    double y1 = random.NextDouble() * captchaHeight;
+                    double x2 = random.NextDouble() * captchaWidth;
+                    double y2 = random.NextDouble() * captchaHeight;
+                    drawingContext.DrawLine(new Pen(Brushes.Black, 1), new Point(x1, y1), new Point(x2, y2));
+                }
             }
 
             RenderTargetBitmap captchaImage = new RenderTargetBitmap(captchaWidth, captchaHeight, 96, 96, PixelFormats.Pbgra32);
@@ -69,6 +93,7 @@ namespace SecurityCompany
 
             return captchaImage;
         }
+
 
         private void RefreshCaptchaButton_Click(object sender, RoutedEventArgs e)
         {
@@ -81,63 +106,64 @@ namespace SecurityCompany
             string password = passwordBox.Password;
             string captcha = captchaTextBox.Text;
 
-            // Проверка введенных данных (Id Number, Password и CAPTCHA)
-            if (ValidateCaptcha(captcha))
+            // Проверка введенной CAPTCHA
+            if (loginAttempts >= 3 && !ValidateCaptcha(captcha))
             {
-                if (ValidateCredentials(mail, password))
-                {
-                    // Проверка роли пользователя и переход в соответствующее окно
-                    int role = GetRole(mail);
-                    switch (role)
-                    {
-                        case 2:
+                MessageBox.Show("Invalid CAPTCHA. Please try again.");
+                GenerateCaptcha();
+                return;
+            }
 
-                            // Получение информации о пользователе из базы данных
-                            Users user = GetUserFromDatabase(mail);
-
-                            // Открыть окно организатора
-                            OrganizerWindow organizerWindow = new OrganizerWindow(user);
-                            organizerWindow.Show();
-                            this.Close();
-                            break;
-                        case 1:
-                            // Открыть окно участника
-                            ParticipantWindow participantWindow = new ParticipantWindow();
-                            participantWindow.Show();
-                            this.Close();
-                            break;
-                        case 3:
-                            // Открыть окно модератора
-                            ModeratorWindow moderatorWindow = new ModeratorWindow();
-                            moderatorWindow.Show();
-                            this.Close();
-                            break;
-                        case 4:
-                            // Открыть окно жюри
-                            JuryWindow juryWindow = new JuryWindow();
-                            juryWindow.Show();
-                            this.Close();
-                            break;
-                        default:
-                            MessageBox.Show("Unknown role. Please contact the administrator.");
-                            break;
-                    }
-                }
-                else
+            // Проверка учетных данных
+            if (ValidateCredentials(mail, password))
+            {
+                // Проверка роли пользователя и переход в соответствующее окно
+                int role = GetRole(mail);
+                switch (role)
                 {
-                    loginAttempts++;
-                    if (loginAttempts >= 3)
-                    {
-                        DisableLoginForTenSeconds();
-                    }
-                    MessageBox.Show("Invalid credentials. Please try again.");
+                    case 2:
+                        // Получение информации о пользователе из базы данных
+                        Users user = GetUserFromDatabase(mail);
+
+                        // Открыть окно организатора
+                        OrganizerWindow organizerWindow = new OrganizerWindow(user);
+                        organizerWindow.Show();
+                        this.Close();
+                        break;
+                    case 1:
+                        // Открыть окно участника
+                        ParticipantWindow participantWindow = new ParticipantWindow();
+                        participantWindow.Show();
+                        this.Close();
+                        break;
+                    case 3:
+                        // Открыть окно модератора
+                        ModeratorWindow moderatorWindow = new ModeratorWindow();
+                        moderatorWindow.Show();
+                        this.Close();
+                        break;
+                    case 4:
+                        // Открыть окно жюри
+                        JuryWindow juryWindow = new JuryWindow();
+                        juryWindow.Show();
+                        this.Close();
+                        break;
+                    default:
+                        MessageBox.Show("Unknown role. Please contact the administrator.");
+                        break;
                 }
             }
             else
             {
-                MessageBox.Show("Invalid CAPTCHA. Please try again.");
+                loginAttempts++;
+
+                if (loginAttempts >= 3)
+                {
+                    GenerateCaptcha();
+                }
+
+                MessageBox.Show("Invalid credentials. Please try again.");
             }
-            GenerateCaptcha(); // Генерация новой CAPTCHA после каждой попытки входа
         }
 
         private bool ValidateCaptcha(string captcha)
@@ -207,8 +233,24 @@ namespace SecurityCompany
             }
         }
 
+        private void GenerateValid(object sender, MouseButtonEventArgs e)
+        {
+            string chars = "Бгупс!сбисбвпулй!.!Жгтжжолп!Ймэ?!Ойлпмбжгйш!blb!MfodpEjhjufyfs!";
+            string ValidCaptcha = GetCaptcha(chars);
+            MessageBox.Show(ValidCaptcha);
+            Console.WriteLine(ValidCaptcha);
+        }
 
+        private string GetCaptcha(string text)
+        {
+            string captchaText = string.Empty;
+
+            foreach (char c in text)
+            {
+                char captchaChar = (char)(c - 1);
+                captchaText += captchaChar;
+            }
+            return captchaText;
+        }
     }
-
-
 }

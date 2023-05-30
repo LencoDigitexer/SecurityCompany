@@ -15,9 +15,17 @@ namespace SecurityCompany
     
     public partial class SecurityCompanyEntities : DbContext
     {
+        private static SecurityCompanyEntities instance;
         public SecurityCompanyEntities()
             : base("name=SecurityCompanyEntities")
         {
+        }
+
+        public static SecurityCompanyEntities Instance()
+        {
+            if (instance == null)
+                instance = new SecurityCompanyEntities();
+            return instance;
         }
     
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

@@ -6,6 +6,15 @@
         xmlns:local="clr-namespace:SecurityCompany"
         mc:Ignorable="d"
         Title="RegistrationWindow" Height="850" Width="800">
+    <Window.Resources>
+        <Style x:Key="InvalidPhoneNumberTextBoxStyle" TargetType="TextBox">
+            <Setter Property="BorderBrush" Value="Red"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="Foreground" Value="Red"/>
+            <Setter Property="ToolTip" Value="Неправильный формат номера телефона. Пример правильного: +7(999)-999-99-99"/>
+        </Style>
+    </Window.Resources>
+
     <ScrollViewer>
         <Grid>
             <Grid.RowDefinitions>
@@ -76,7 +85,8 @@
 
                 <!-- Телефон -->
                 <TextBlock Grid.Row="13" Text="Телефон:" FontWeight="Bold"/>
-                <TextBox Grid.Row="14" x:Name="phoneTextBox" Margin="5" Text="{Binding phone}"/>
+                <TextBox Grid.Row="14" x:Name="phoneTextBox" Margin="5" Text="{Binding phone}" TextChanged="PhoneTextBox_TextChanged"/>
+
 
                 <!-- Направление -->
                 <TextBlock Grid.Row="15" Text="Направление:" FontWeight="Bold"/>

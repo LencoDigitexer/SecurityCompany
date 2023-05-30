@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -131,6 +132,38 @@ namespace SecurityCompany
             confirmPasswordBox.Password = string.Empty;
         }
 
-        
+        private void PhoneTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox textBox = (TextBox)sender;
+            string phoneNumber = textBox.Text;
+
+            // Выполните валидацию номера телефона
+            bool isValidPhoneNumber = ValidatePhoneNumber(phoneNumber);
+
+            // Установите состояние валидации, например, измените стиль TextBox или отобразите сообщение об ошибке
+            if (isValidPhoneNumber)
+            {
+                // Номер телефона валиден
+                textBox.Style = null; // Сброс стиля валидации
+            }
+            else
+            {
+                // Номер телефона невалиден
+                textBox.Style = (Style)FindResource("InvalidPhoneNumberTextBoxStyle"); // Применение стиля валидации
+            }
+        }
+
+        private bool ValidatePhoneNumber(string phoneNumber)
+        {
+            // Выполните валидацию номера телефона, используя регулярное выражение или другие методы проверки формата
+            // Верните true, если номер телефона валиден, иначе false
+
+            // Пример реализации валидации номера телефона с использованием регулярного выражения
+            Regex regex = new Regex(@"^\+7\(\d{3}\)-\d{3}-\d{2}-\d{2}$");
+            return regex.IsMatch(phoneNumber);
+        }
+
+
+
     }
 }
